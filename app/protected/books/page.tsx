@@ -5,6 +5,7 @@ import BooksList from "@/components/books/book-lists";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { supabase } from "@/lib/supabase/client";
+import BookActions from "@/components/books/book-action";
 
 export const metadata: Metadata = {
   title: "Book Catalog | Library & Book Store Inventory System",
@@ -47,6 +48,7 @@ export default async function BooksPage({
   //   supabase.from("books").select("author").distinct(),
   // ]);
   const { data: books, error } = await supabase.from("books").select("*");
+  const { data: inventory } = await supabase.from("inventory").select("*");
 
   if (error) {
     console.error("Error fetching books:", error);

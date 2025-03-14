@@ -19,6 +19,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import BookActions from "./book-action";
 
 interface BooksListProps {
   books: any[];
@@ -104,20 +105,21 @@ export default function BooksList({
                         : "Out of stock"}
                     </p>
                   </div>
-                  {/* <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {book.published_date
                       ? utils.formatDate(book.published_date)
                       : "Unknown date"}
-                  </p> */}
+                  </p>
                 </div>
               </CardContent>
+              <BookActions book={books} inventory={inventory} />
               <CardFooter className="pt-0">
                 <Button
                   asChild
                   className="w-full"
                   disabled={!inventory || inventory.stock <= 0}
                 >
-                  <Link href={`/books/${book.id}`}>
+                  <Link href={`/protected/books/${book.id}`}>
                     {inventory && inventory.stock > 0
                       ? "View Details"
                       : "Out of Stock"}
