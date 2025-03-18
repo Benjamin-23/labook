@@ -1,44 +1,118 @@
-import NextLogo from "./next-logo";
-import SupabaseLogo from "./supabase-logo";
+// components/layout/main-nav.tsx
+"use client";
 
-export default function Header() {
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Book,
+  Calendar,
+  CreditCard,
+  Home,
+  LayoutDashboard,
+  LineChart,
+  Settings,
+  Truck,
+  Users,
+} from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+
+interface NavItem {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+  roles?: string[];
+}
+
+const navItems: NavItem[] = [
+  {
+    title: "Dashboard",
+    href: "/protected",
+    icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
+  },
+  {
+    title: "Books",
+    href: "/protected/books",
+    icon: <Book className="mr-2 h-4 w-4" />,
+  },
+  {
+    title: "Inventory",
+    href: "/protected/inventory",
+    icon: <Book className="mr-2 h-4 w-4" />,
+    roles: ["admin", "librarian"],
+  },
+  {
+    title: "Loans",
+    href: "/loans",
+    icon: <Calendar className="mr-2 h-4 w-4" />,
+    roles: ["admin", "librarian"],
+  },
+  {
+    title: "Sales",
+    href: "/sales",
+    icon: <CreditCard className="mr-2 h-4 w-4" />,
+    roles: ["admin", "librarian"],
+  },
+  {
+    title: "Purchases",
+    href: "/purchases",
+    icon: <Truck className="mr-2 h-4 w-4" />,
+    roles: ["admin"],
+  },
+  {
+    title: "Users",
+    href: "/users",
+    icon: <Users className="mr-2 h-4 w-4" />,
+    roles: ["admin"],
+  },
+  {
+    title: "Reports",
+    href: "/reports",
+    icon: <LineChart className="mr-2 h-4 w-4" />,
+    roles: ["admin", "librarian"],
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    icon: <Settings className="mr-2 h-4 w-4" />,
+  },
+];
+
+import { type User } from "@supabase/supabase-js";
+interface MainNavProps {
+  user: User | null;
+}
+
+export function MainNav({ user }: MainNavProps) {
+  const pathname = usePathname();
+  const userRole = user?.user_metadata?.role || "customer";
+
   return (
-    <div className="flex flex-col gap-16 items-center">
-      <div className="flex gap-8 justify-center items-center">
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <SupabaseLogo />
-        </a>
-        <span className="border-l rotate-45 h-6" />
-        <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
-          <NextLogo />
-        </a>
-      </div>
-      <h1 className="sr-only">Supabase and Next.js Starter Template</h1>
-      <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
-        The fastest way to build apps with{" "}
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Supabase
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://nextjs.org/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Next.js
-        </a>
-      </p>
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
-    </div>
+    <nav className="flex flex-col gap-1">
+      {navItems.map((item) => {
+        // Check if the item should be shown based on user role
+        if (item.roles && !item.roles.includes(userRole)) {
+          return null;
+        }
+
+        return (
+          <Link key={item.href} href={item.href} passHref>
+            <Button
+              variant={pathname === item.href ? "secondary" : "ghost"}
+              className={cn(
+                "w-full justify-start",
+                pathname === item.href
+                  ? "bg-secondary text-secondary-foreground"
+                  : "hover:bg-secondary/50",
+              )}
+            >
+              {item.icon}
+              {item.title}
+            </Button>
+          </Link>
+        );
+      })}
+    </nav>
   );
 }
