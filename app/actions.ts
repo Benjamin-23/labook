@@ -53,7 +53,6 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  console.log(data.user.id, "kuna kitu");
   // Check if user role in the user table
 
   const { data: userRole } = await supabase
@@ -61,8 +60,6 @@ export const signInAction = async (formData: FormData) => {
     .select("role")
     .eq("email", data.user.email)
     .single();
-
-  console.log(userRole, "user role");
 
   if (
     !userRole ||

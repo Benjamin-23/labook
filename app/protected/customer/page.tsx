@@ -12,33 +12,38 @@ export default function CustomerDashboard() {
 
   useEffect(() => {
     // Check if user is authenticated
-    //   const checkUser = async () => {
-    //     const {
-    //       data: { session },
-    //     } = await supabase.auth.getSession();
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    // if (!session) {
-    //   return redirect("/sign-in");
-    // }
+      console.log(user, "user available");
 
-    // const { data: profile, error } = await supabase
-    //   .from("users")
-    //   .select("*")
-    //   .eq("email", session.user.email)
-    //   .single();
+      // if (!session) {
+      //   return redirect("/sign-in");
+      // }
 
-    // if (error || profile.role !== "customer") {
-    //   await supabase.auth.signOut();
+      const fetchUserProfile = async () => {
+        const { data: profile, error } = await supabase
+          .from("users")
+          .select("*")
+          .eq("email", user?.email)
+          .single();
 
-    //   return redirect("/sign-in");
-    // }
+        // if (error || profile.role !== "customer") {
+        //   await supabase.auth.signOut();
 
-    // setUser({ ...session.user, ...profile });
-    fetchBooks();
-    // fetchMyBooks(session.user.id);
-    // };
+        //   return redirect("/sign-in");
+        // }
+      };
 
-    // checkUser();
+      setUser(user as null);
+      // console.log(fetchUserProfile, "user profile");
+
+      fetchBooks();
+      // fetchMyBooks(user.id);
+    };
+    checkUser();
   }, []);
 
   async function fetchBooks() {
@@ -46,7 +51,7 @@ export default function CustomerDashboard() {
       const { data, error } = await supabase
         .from("inventory")
         .select(
-          "quantity,selling_price,books(id, title, author,genre,publication_date, isbn)",
+          "book_id,quantity,selling_price,books(id, title, author,genre,publication_date, isbn)",
         );
       console.log(data);
 
@@ -86,14 +91,14 @@ export default function CustomerDashboard() {
   }
 
   async function handleLend(bookId: any) {
-    if (!user) return;
+    // if (!user) return;
 
     try {
       // Check if book is available
       const { data: book, error: bookError } = await supabase
-        .from("books")
+        .from("inventory")
         .select("quantity")
-        .eq("id", bookId)
+        .eq("book_id", bookId)
         .single();
 
       if (bookError) throw bookError;
@@ -108,23 +113,26 @@ export default function CustomerDashboard() {
       dueDate.setDate(dueDate.getDate() + 14);
 
       // Create transaction record
-      const { error: transactionError } = await supabase
-        .from("transactions")
+      const { data, error: transactionError } = await supabase
+        .from("loan")
         .insert([
           {
-            user_id: user?.id,
             book_id: bookId,
-            transaction_type: "lend",
-            status: "active",
+            user_id: session.user?.id,
+            checkout_date: new Date().toISOString(),
             due_date: dueDate.toISOString(),
+            return_date: null,
+            status: "active",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
           },
         ]);
 
       if (transactionError) throw transactionError;
-
+      console.log(data, "lend");
       // Update book quantity
       const { error: updateError } = await supabase
-        .from("books")
+        .from("inventory")
         .update({ quantity: book.quantity - 1 })
         .eq("id", bookId);
 
@@ -143,7 +151,12 @@ export default function CustomerDashboard() {
   }
 
   async function handlePurchase(bookId: any) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    console.log(user);
     if (!user) return;
+    console.log("Uko kweli");
 
     try {
       // Check if book is available
@@ -225,21 +238,25 @@ export default function CustomerDashboard() {
 
       // Refresh data
       fetchBooks();
-      fetchMyBooks(user.id);
+      // fetchMyBooks(user.id);
       alert("Book returned successfully!");
     } catch (error) {
       console.error("Error returning book:", error);
       alert("Failed to return book: " + error.message);
     }
   }
+  // filtered data
 
   const filteredBooks = books.filter(
     (book) =>
       book.books.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       book.books.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.books.isbn.includes(searchTerm),
+      book.books.isbn.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  // console.log(filteredBooks, "my filtered data");
+
+  // loading
   if (loading) {
     return <div className="text-center p-12">Loading...</div>;
   }
@@ -289,7 +306,7 @@ export default function CustomerDashboard() {
                       </td>
                       <td className="py-2 px-4 border-b">
                         <button
-                          onClick={() => handleReturn(item.id, item.book_id)}
+                          onClick={() => handleReturn(item?.id, item?.book_id)}
                           className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
                         >
                           Return
@@ -335,13 +352,13 @@ export default function CustomerDashboard() {
 
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleLend(book.id)}
-                    className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-700 flex-1"
+                    onClick={() => handleLend(book.books.id)}
+                    className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-700 flex-1 cursor-pointer"
                   >
                     Borrow
                   </button>
                   <button
-                    onClick={() => handlePurchase(book.id)}
+                    onClick={() => handlePurchase(book.books.id)}
                     className="bg-purple-600 text-white px-3 py-1.5 rounded text-sm hover:bg-purple-700 flex-1"
                   >
                     Purchase
