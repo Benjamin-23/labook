@@ -23,23 +23,21 @@ import BookActions from "./book-action";
 import AddBookForm from "./add-book";
 
 interface BooksListProps {
-  books: any[];
+  inventory: any[];
   totalCount: number;
   currentPage: number;
   pageSize: number;
-  inventory: any[];
 }
 
 export default function BooksList({
-  books,
+  inventory,
   totalCount,
   currentPage,
   pageSize,
-  inventory,
 }: BooksListProps) {
   const totalPages = Math.ceil(totalCount / pageSize);
 
-  if (!books || books.length === 0) {
+  if (!inventory || inventory.length === 0) {
     return (
       <div className="flex h-[400px] w-full flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
         <BookOpen className="h-10 w-10 text-muted-foreground" />
@@ -55,14 +53,10 @@ export default function BooksList({
     <div className="space-y-6">
       <AddBookForm />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {books.map((book) => {
-          const inventory =
-            Array.isArray(book.inventory) && book.inventory.length > 0
-              ? book.inventory[0]
-              : null;
+        {inventory.map((inventory: any) => {
           return (
             <Card
-              key={book.id}
+              key={inventory.books.id}
               className="flex h-full flex-col overflow-hidden"
             >
               {/* <div className="relative aspect-[2/3] w-full overflow-hidden bg-muted">
@@ -82,18 +76,21 @@ export default function BooksList({
               </div> */}
               <CardHeader className="flex-grow pb-2">
                 <CardTitle className="line-clamp-2 text-lg">
-                  <Link href={`/books/${book.id}`} className="hover:underline">
-                    {book.title}
+                  <Link
+                    href={`/books/${inventory.books.id}`}
+                    className="hover:underline"
+                  >
+                    {inventory.books.title}
                   </Link>
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  by {book.author || "Unknown Author"}
+                  by {inventory.books.author || "Unknown Author"}
                 </p>
               </CardHeader>
               <CardContent className="pb-4">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="text-xs">
-                    {book?.genre}
+                    {inventory.books.genre}
                   </Badge>
                 </div>
                 <div className="mt-4 flex items-center justify-between">
@@ -102,14 +99,14 @@ export default function BooksList({
                       ${inventory?.selling_price || "N/A"}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {inventory?.quantity > 0
+                      {inventory.quantity > 0
                         ? `${inventory.quantity} in stock`
                         : "Out of stock"}
                     </p>
                   </div>
                   {/* <p className="text-xs text-muted-foreground">
-                    {book.publication_date
-                      ? utils.formatDate(book.publication_date)
+                    {inventory.books.publication_date
+                      ? utils.formatDate(inventory.books.publication_date)
                       : "Unknown date"}
                   </p> */}
                 </div>
@@ -119,10 +116,17 @@ export default function BooksList({
                 <Button
                   asChild
                   className="w-full"
-                  disabled={!inventory || inventory.stock <= 0}
+                  disabled={!inventory || inventory?.quantity <= 0}
                 >
-                  <Link href={`/protected/books/${book.id}`}>
-                    {inventory && inventory.quantity > 0
+                  <Link
+                    href={`/protected/books/${inventory.books.id}`}
+                    className={
+                      inventory && inventory?.quantity <= 0
+                        ? "bg-red-400 text-white hover:bg-red-300"
+                        : ""
+                    }
+                  >
+                    {inventory && inventory?.quantity > 0
                       ? "View Details"
                       : "Out of Stock"}
                   </Link>

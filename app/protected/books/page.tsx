@@ -47,8 +47,13 @@ export default async function BooksPage({
   //   prisma.books.findMany({ select: { genre: true }, distinct: ["genre"] }),
   //   supabase.from("books").select("author").distinct(),
   // ]);
-  const { data: books, error } = await supabase.from("books").select("*");
-  const { data: inventory } = await supabase.from("inventory").select("*");
+  // const { data: books, error } = await supabase.from("books").select("*");
+  // console.log(books, "books");
+  const { data: inventory, error } = await supabase
+    .from("inventory")
+    .select(
+      "quantity,selling_price,books(id, title, author,genre,publication_date)",
+    );
 
   if (error) {
     console.error("Error fetching books:", error);
@@ -72,11 +77,10 @@ export default async function BooksPage({
         <div className="w-full md:w-3/4">
           {/* <BookSearch /> */}
           <BooksList
-            books={books}
+            inventory={inventory ?? []}
             totalCount={1}
             currentPage={1}
             pageSize={10}
-            inventory={inventory ?? []}
           />
         </div>
       </div>

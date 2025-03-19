@@ -7,7 +7,7 @@ export default function CustomerDashboard() {
   const [user, setUser] = useState(null);
   const [books, setBooks] = useState<any[]>([]);
   const [myBooks, setMyBooks] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -43,10 +43,15 @@ export default function CustomerDashboard() {
 
   async function fetchBooks() {
     try {
-      const { data, error } = await supabase.from("books").select("*");
+      const { data, error } = await supabase
+        .from("inventory")
+        .select(
+          "quantity,selling_price,books(id, title, author,genre,publication_date, isbn)",
+        );
+      console.log(data);
 
       if (error) throw error;
-      setBooks((data as any[]) || []);
+      setBooks(data || []);
     } catch (error) {
       console.error("Error fetching books:", error);
     } finally {
@@ -131,7 +136,7 @@ export default function CustomerDashboard() {
       alert(
         "Book borrowed successfully! Due date: " + dueDate.toLocaleDateString(),
       );
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error borrowing book:", error);
       alert("Failed to borrow book: " + error.message);
     }
@@ -186,7 +191,7 @@ export default function CustomerDashboard() {
       // Refresh data
       fetchBooks();
       alert("Book purchased successfully!");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error purchasing book:", error);
       alert("Failed to purchase book: " + error.message);
     }
@@ -230,9 +235,9 @@ export default function CustomerDashboard() {
 
   const filteredBooks = books.filter(
     (book) =>
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.isbn.includes(searchTerm),
+      book.books.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.books.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.books.isbn.includes(searchTerm),
   );
 
   if (loading) {
@@ -316,15 +321,17 @@ export default function CustomerDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredBooks.map((book) => (
             <div
-              key={book.id}
+              key={book.books.id}
               className="border rounded-lg overflow-hidden shadow-md"
             >
               <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">{book.title}</h3>
-                <p className="text-gray-700 mb-1">By: {book.author}</p>
-                <p className="text-gray-500 mb-1">ISBN: {book.isbn}</p>
+                <h3 className="text-lg font-semibold mb-2">
+                  {book.books.title}
+                </h3>
+                <p className="text-gray-700 mb-1">By: {book.books.author}</p>
+                <p className="text-gray-500 mb-1">ISBN: {book.books.isbn}</p>
                 <p className="text-gray-500 mb-3">Available: {book.quantity}</p>
-                <p className="font-medium mb-4">${book.price}</p>
+                <p className="font-medium mb-4">${book.selling_price}</p>
 
                 <div className="flex gap-2">
                   <button

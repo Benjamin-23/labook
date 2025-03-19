@@ -114,17 +114,17 @@ export function MainNav({ user }: MainNavProps) {
     const customerNavItems: NavItem[] = [
       {
         title: "Book List",
-        href: "/protected/books",
+        href: "/protected/customer",
         icon: <Book className="mr-2 h-4 w-4" />,
       },
       {
         title: "My Collection",
-        href: "/protected/collection",
+        href: "/protected/customer/collection",
         icon: <Home className="mr-2 h-4 w-4" />,
       },
       {
         title: "Book Borrowed",
-        href: "/protected/borrowed",
+        href: "/protected/customer/borrowed",
         icon: <Calendar className="mr-2 h-4 w-4" />,
       },
       {
