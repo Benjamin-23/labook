@@ -76,6 +76,7 @@ export default async function BooksPage({
             totalCount={1}
             currentPage={1}
             pageSize={10}
+            inventory={inventory ?? []}
           />
         </div>
       </div>

@@ -80,8 +80,8 @@ export function AddUser() {
             Fill in the form below to create a new user.
           </SheetDescription>
         </SheetHeader>
-        -
-        <div className="grid gap-4 py-4 max-h-[400px] overflow-y-auto">
+
+        <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto">
           <div className="">
             <Label htmlFor="email" className="text-right">
               Email

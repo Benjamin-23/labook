@@ -1,6 +1,7 @@
 import { AddUser } from "@/components/add-user";
 import AddBookForm from "@/components/books/add-book";
 import { MainNav } from "@/components/hero";
+import { UserAccountNav } from "@/components/layout/user-account-nav";
 import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
 import { createClient } from "@/utils/supabase/server";
 import { InfoIcon } from "lucide-react";
@@ -17,13 +18,20 @@ export default async function ProtectedPage() {
     return redirect("/sign-in");
   }
 
+  const { data: books, error: booksError } = await supabase
+    .from("books")
+    .select("*");
+
+  if (booksError) {
+    throw booksError;
+  }
+
   return (
     <div className="flex-1 w-full flex">
-      {/* <MainNav user={user} /> */}
       <div className="flex flex-col">
-        <div className="animate-in flex-1 flex flex-col gap-6 px-8 mx-auto">
+        <div className="animate-in flex-1 flex flex-col gap-6 px-8 py-4 mx-auto">
           <div className="flex w-full justify-between items-center">
-            <div className="flex flex-col items-center gap-4 text-center">
+            <div className="flex flex-col gap-4">
               <h1 className="text-3xl font-bold">
                 Library and Book Store Inventory System
               </h1>
@@ -76,19 +84,19 @@ export default async function ProtectedPage() {
             <div className="mt-8">
               <h2 className="text-2xl font-bold mb-4">Quick Stats</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="p-4 bg-gray-100 rounded">
+                <div className="p-4 bg-gray-800 rounded">
                   <p className="text-sm text-gray-600">Total Books</p>
-                  <p className="text-2xl font-bold">2,456</p>
+                  <p className="text-2xl font-bold">{books.length}</p>
                 </div>
-                <div className="p-4 bg-gray-100 rounded">
+                <div className="p-4 bg-gray-800 rounded">
                   <p className="text-sm text-gray-600">Books Out</p>
-                  <p className="text-2xl font-bold">183</p>
+                  <p className="text-2xl font-bold">34</p>
                 </div>
-                <div className="p-4 bg-gray-100 rounded">
+                <div className="p-4 bg-gray-800 rounded">
                   <p className="text-sm text-gray-600">Overdue</p>
                   <p className="text-2xl font-bold text-red-500">12</p>
                 </div>
-                <div className="p-4 bg-gray-100 rounded">
+                <div className="p-4 bg-gray-800 rounded">
                   <p className="text-sm text-gray-600">Sales Today</p>
                   <p className="text-2xl font-bold text-green-500">$842</p>
                 </div>

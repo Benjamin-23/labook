@@ -80,13 +80,81 @@ const navItems: NavItem[] = [
 ];
 
 import { type User } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase/client";
+import { useEffect, useState } from "react";
 interface MainNavProps {
   user: User | null;
 }
 
 export function MainNav({ user }: MainNavProps) {
   const pathname = usePathname();
-  const userRole = user?.user_metadata?.role || "customer";
+  const [role, setRole] = useState("customer");
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      if (user) {
+        const { data: userRole, error } = await supabase
+          .from("users")
+          .select("role")
+          .eq("email", user.email)
+          .single();
+
+        if (userRole) {
+          setRole(userRole.role);
+        }
+      }
+    };
+
+    fetchRole();
+  }, [user]);
+  const userRole = role;
+  console.log(userRole, "user role");
+
+  if (userRole === "Customer") {
+    const customerNavItems: NavItem[] = [
+      {
+        title: "Book List",
+        href: "/protected/books",
+        icon: <Book className="mr-2 h-4 w-4" />,
+      },
+      {
+        title: "My Collection",
+        href: "/protected/collection",
+        icon: <Home className="mr-2 h-4 w-4" />,
+      },
+      {
+        title: "Book Borrowed",
+        href: "/protected/borrowed",
+        icon: <Calendar className="mr-2 h-4 w-4" />,
+      },
+      {
+        title: "Settings",
+        href: "/settings",
+        icon: <Settings className="mr-2 h-4 w-4" />,
+      },
+    ];
+
+    return (
+      <nav className="flex flex-col gap-1">
+        {customerNavItems.map((item) => (
+          <Link key={item.href} href={item.href} passHref>
+            <Button
+              variant={pathname === item.href ? "secondary" : "ghost"}
+              className={cn(
+                "w-full justify-start",
+                pathname === item.href
+                  ? "bg-secondary text-secondary-foreground"
+                  : "hover:bg-secondary/50",
+              )}
+            >
+              {item.icon}
+              {item.title}
+            </Button>
+          </Link>
+        ))}
+      </nav>
+    );
+  }
 
   return (
     <nav className="flex flex-col gap-1">

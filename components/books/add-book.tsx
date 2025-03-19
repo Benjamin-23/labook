@@ -127,7 +127,7 @@ export default function AddBookForm() {
 
       toast(`${data.title} has been added to the inventory.`);
 
-      router.push("protected/books");
+      router.push("/protected/books");
       router.refresh();
     } catch (error: any) {
       console.error("Error adding book:", error);
@@ -142,7 +142,7 @@ export default function AddBookForm() {
       <DialogTrigger asChild>
         <Button variant="outline">Add New Book</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-full max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-full max-h-[100vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Book</DialogTitle>
           <DialogDescription>

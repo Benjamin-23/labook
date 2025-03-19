@@ -44,7 +44,7 @@ export const signInAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -53,6 +53,28 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
+  console.log(data.user.id, "kuna kitu");
+  // Check if user role in the user table
+
+  const { data: userRole } = await supabase
+    .from("users")
+    .select("role")
+    .eq("email", data.user.email)
+    .single();
+
+  console.log(userRole, "user role");
+
+  if (
+    !userRole ||
+    (userRole.role !== "Customer" &&
+      userRole.role !== "Admin" &&
+      userRole.role !== "SuperAdmin")
+  ) {
+    return encodedRedirect("error", "/sign-in", "Unauthorized access");
+  }
+  if (userRole && userRole.role === "Customer") {
+    return redirect("/protected/customer");
+  }
   return redirect("/protected");
 };
 

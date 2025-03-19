@@ -20,12 +20,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import BookActions from "./book-action";
+import AddBookForm from "./add-book";
 
 interface BooksListProps {
   books: any[];
   totalCount: number;
   currentPage: number;
   pageSize: number;
+  inventory: any[];
 }
 
 export default function BooksList({
@@ -33,6 +35,7 @@ export default function BooksList({
   totalCount,
   currentPage,
   pageSize,
+  inventory,
 }: BooksListProps) {
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -50,6 +53,7 @@ export default function BooksList({
 
   return (
     <div className="space-y-6">
+      <AddBookForm />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {books.map((book) => {
           const inventory =
@@ -88,31 +92,29 @@ export default function BooksList({
               </CardHeader>
               <CardContent className="pb-4">
                 <div className="flex flex-wrap gap-2">
-                  {book.genres?.map((genre: string) => (
-                    <Badge key={genre} variant="secondary" className="text-xs">
-                      {genre}
-                    </Badge>
-                  ))}
+                  <Badge variant="secondary" className="text-xs">
+                    {book?.genre}
+                  </Badge>
                 </div>
                 <div className="mt-4 flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium">
-                      ${inventory?.price.toFixed(2) || "N/A"}
+                      ${inventory?.selling_price || "N/A"}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {inventory?.stock > 0
-                        ? `${inventory.stock} in stock`
+                      {inventory?.quantity > 0
+                        ? `${inventory.quantity} in stock`
                         : "Out of stock"}
                     </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    {book.published_date
-                      ? utils.formatDate(book.published_date)
+                  {/* <p className="text-xs text-muted-foreground">
+                    {book.publication_date
+                      ? utils.formatDate(book.publication_date)
                       : "Unknown date"}
-                  </p>
+                  </p> */}
                 </div>
               </CardContent>
-              <BookActions book={books} inventory={inventory} />
+              {/* <BookActions book={books} inventory={inventory} /> */}
               <CardFooter className="pt-0">
                 <Button
                   asChild
@@ -120,7 +122,7 @@ export default function BooksList({
                   disabled={!inventory || inventory.stock <= 0}
                 >
                   <Link href={`/protected/books/${book.id}`}>
-                    {inventory && inventory.stock > 0
+                    {inventory && inventory.quantity > 0
                       ? "View Details"
                       : "Out of Stock"}
                   </Link>
