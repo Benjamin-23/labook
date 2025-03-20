@@ -2,6 +2,7 @@
 import { supabase } from "@/lib/supabase/client";
 import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
+import { PaymentMethods } from "./payment";
 
 export default function BookCollection({ user }: any) {
   // const [user, setUser] = useState(null);
@@ -82,12 +83,12 @@ export default function BookCollection({ user }: any) {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setBooks((data as any[]) || []);
+      setMyBooks(data || []);
     } catch (error) {
       console.error("Error fetching transactions:", error);
     }
   }
-
+  console.log(myBooks, "my loans books");
   async function handleLend(bookId: any) {
     if (!user) return;
 
@@ -213,7 +214,7 @@ export default function BookCollection({ user }: any) {
     try {
       // Update transaction status
       const { error: transactionError } = await supabase
-        .from("transactions")
+        .from("loans")
         .update({ status: "returned" })
         .eq("id", transactionId);
 
@@ -221,24 +222,33 @@ export default function BookCollection({ user }: any) {
 
       // Increment book quantity
       const { data: book, error: bookError } = await supabase
-        .from("books")
+        .from("inventory")
         .select("quantity")
-        .eq("id", bookId)
+        .eq("book_id", bookId)
         .single();
 
       if (bookError) throw bookError;
 
       const { error: updateError } = await supabase
-        .from("books")
+        .from("inventory")
         .update({ quantity: book.quantity + 1 })
-        .eq("id", bookId);
+        .eq("book_id", bookId);
 
+      fetchBooks();
       if (updateError) throw updateError;
 
       // Refresh data
       fetchBooks();
       // fetchMyBooks(user.id);
       alert("Book returned successfully!");
+
+      const { error: loanError } = await supabase
+        .from("loan")
+        .delete()
+        .eq("id", transactionId);
+
+      if (loanError) throw loanError;
+      myBooks;
     } catch (error) {
       console.error("Error returning book:", error);
       alert("Failed to return book: " + error.message);
@@ -276,43 +286,39 @@ export default function BookCollection({ user }: any) {
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4">My Borrowed Books</h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200">
+            <table className="min-w-full bg-secondary border border-secondary">
               <thead>
                 <tr>
                   <th className="py-2 px-4 border-b text-left">Title</th>
                   <th className="py-2 px-4 border-b text-left">Author</th>
                   <th className="py-2 px-4 border-b text-left">
-                    Borrowed Date
+                    Borrowed Date0
                   </th>
                   <th className="py-2 px-4 border-b text-left">Due Date</th>
                   <th className="py-2 px-4 border-b text-left">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {myBooks
-                  .filter((item) => item?.transaction_type === "lend")
-                  .map((item) => (
-                    <tr key={item.id} className="hover:bg-gray-50">
-                      <td className="py-2 px-4 border-b">{item.books.title}</td>
-                      <td className="py-2 px-4 border-b">
-                        {item.books.author}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {new Date(item.created_at).toLocaleDateString()}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {new Date(item.due_date).toLocaleDateString()}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        <button
-                          onClick={() => handleReturn(item?.id, item?.book_id)}
-                          className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
-                        >
-                          Return
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                {myBooks.map((item: any) => (
+                  <tr key={item.id} className="hover:bg-secondary">
+                    <td className="py-2 px-4 border-b">{item.books?.title}</td>
+                    <td className="py-2 px-4 border-b">{item.books.author}</td>
+                    <td className="py-2 px-4 border-b">
+                      {new Date(item.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {new Date(item.due_date).toLocaleDateString()}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      <button
+                        onClick={() => handleReturn(item?.id, item?.book_id)}
+                        className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+                      >
+                        Return
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -329,7 +335,7 @@ export default function BookCollection({ user }: any) {
               placeholder="Search by title, author, or ISBN"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="px-4 py-2 border rounded-md w-64"
+              className="px-4 py-2 border rounded-md w-64 bg-secondary"
             />
           </div>
         </div>
@@ -352,16 +358,11 @@ export default function BookCollection({ user }: any) {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleLend(book.books.id)}
-                    className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-700 flex-1 cursor-pointer"
+                    className="bg-secondary text-white px-3 py-1.5 rounded text-sm hover:bg-primary flex-1 cursor-pointer"
                   >
                     Borrow
                   </button>
-                  <button
-                    onClick={() => handlePurchase(book.books.id)}
-                    className="bg-purple-600 text-white px-3 py-1.5 rounded text-sm hover:bg-purple-700 flex-1"
-                  >
-                    Purchase
-                  </button>
+                  <PaymentMethods />
                 </div>
               </div>
             </div>
