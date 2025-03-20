@@ -108,7 +108,6 @@ export function MainNav({ user }: MainNavProps) {
     fetchRole();
   }, [user]);
   const userRole = role;
-  console.log(userRole, "user role");
 
   if (userRole === "Customer") {
     const customerNavItems: NavItem[] = [
