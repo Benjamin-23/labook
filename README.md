@@ -1,12 +1,13 @@
 📚 Library and Book Store Inventory System
 
 A comprehensive software solution for managing the tracking, cataloging, and circulation of books in libraries and bookstores. This system handles inventory control, lending/purchasing operations, and sales management efficiently.
+
 🚀 Features
 Inventory Management
 
 Book Cataloging: Add, edit, and remove books with detailed metadata
 Real-time Inventory Tracking: Monitor stock levels with automatic updates
-Barcode/ISBN Integration: Quick scanning and identification of books
+ISBN Integration: Quick scanning and identification of books
 Categorization & Tagging: Organize books by genre, author, publisher, etc.
 
 Circulation Management
@@ -23,15 +24,6 @@ Discount Management: Apply promotional offers and discounts
 Sales Reporting: Generate reports on sales performance and trends
 Customer Management: Track customer purchases and preferences
 
-Loan Features
-
-Flexible Loan Periods: Configure different loan durations based on book type
-Renewal Options: Allow users to extend loan periods online
-Multi-Copy Management: Track individual copies of the same book
-Member History: View complete borrowing records for each member
-Automated Reminders: Send notifications for upcoming due dates
-Hold Management: Create and manage waiting lists for popular titles
-Loan Statistics: Generate reports on loan patterns and popular items
 
 ##User Interface
 
@@ -39,6 +31,31 @@ Admin Dashboard: Comprehensive management interface
 Customer Portal: User-friendly interface for browsing and account management
 Search Functionality: Advanced search with filters and recommendations
 Responsive Design: Accessible on both desktop and mobile devices
+
+📱 Customer Screen
+
+Borrowed Books View:
+- Display list of currently borrowed books with:
+  * Book title and author
+  * Due dates and remaining days
+  * Option to extend borrowing period
+  * Return status and late fees if applicable
+- Historical view of previously borrowed books
+- Filter and sort capabilities by date, title, author
+- Digital receipt downloads
+
+Available Books Catalog:
+- Grid/List view of all available books showing:
+  * Cover image and basic details
+  * Current availability status
+  * Location in library/store
+  * Option to reserve if checked out
+- Advanced filtering by:
+  * Genre, author, publisher
+  * Rating and popularity
+  * New arrivals and featured books
+- Personalized recommendations based on borrowing history
+- Quick search with auto-complete
 
 🛠️ Tech Stack
 
@@ -80,9 +97,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key`
 
 Run the development server:
 
-npm run dev
+`npm run dev`
 # or
-yarn dev
+`yarn dev`
 
 Open http://localhost:3000 in your browser to see the application.
 
