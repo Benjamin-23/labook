@@ -40,37 +40,37 @@ const navItems: NavItem[] = [
     title: "Inventory",
     href: "/protected/inventory",
     icon: <Book className="mr-2 h-4 w-4" />,
-    roles: ["admin", "librarian"],
+    roles: ["Admin", "librarian"],
   },
   {
-    title: "Loans",
+    title: "loaned Books",
     href: "/loans",
     icon: <Calendar className="mr-2 h-4 w-4" />,
-    roles: ["admin", "librarian"],
+    roles: ["Admin", "librarian"],
   },
   {
     title: "Sales",
     href: "/sales",
     icon: <CreditCard className="mr-2 h-4 w-4" />,
-    roles: ["admin", "librarian"],
+    roles: ["Admin", "librarian"],
   },
   {
     title: "Purchases",
     href: "/purchases",
     icon: <Truck className="mr-2 h-4 w-4" />,
-    roles: ["admin"],
+    roles: ["Admin"],
   },
   {
     title: "Users",
     href: "/users",
     icon: <Users className="mr-2 h-4 w-4" />,
-    roles: ["admin"],
+    roles: ["Admin"],
   },
   {
     title: "Reports",
     href: "/reports",
     icon: <LineChart className="mr-2 h-4 w-4" />,
-    roles: ["admin", "librarian"],
+    roles: ["Admin", "librarian"],
   },
   {
     title: "Settings",
@@ -108,7 +108,6 @@ export function MainNav({ user }: MainNavProps) {
     fetchRole();
   }, [user]);
   const userRole = role;
-  console.log(userRole, "user role");
 
   if (userRole === "Customer") {
     const customerNavItems: NavItem[] = [
