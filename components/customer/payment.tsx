@@ -30,7 +30,10 @@ export function PaymentMethods() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className=" bg-primary flex flex-1">
+        <Button
+          variant="outline"
+          className=" bg-primary flex flex-1 hover:bg-primary"
+        >
           Purchase
         </Button>
       </DialogTrigger>

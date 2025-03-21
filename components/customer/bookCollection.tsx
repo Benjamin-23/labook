@@ -358,7 +358,7 @@ export default function BookCollection({ user }: any) {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleLend(book.books.id)}
-                    className="bg-secondary text-white px-3 py-1.5 rounded text-sm hover:bg-primary flex-1 cursor-pointer"
+                    className="bg-secondary text-white px-3 py-1.5 rounded text-sm hover:bg-secondary flex-1 cursor-pointer"
                   >
                     Borrow
                   </button>
