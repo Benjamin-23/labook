@@ -25,10 +25,12 @@ Discount Management: Apply promotional offers and discounts
 Sales Reporting: Generate reports on sales performance and trends
 Customer Management: Track customer purchases and preferences
 
+### Admin Dashboard
 <img src="public/sign-in.png" alt="Sales" />
-<img src="public/addUser.png" alt="Sales" />
 <img src="public/admindashboard.png" alt="Sales" />
+<img src="public/addUser.png" alt="Sales" />
 <img src="public/booklist.png" alt="Sales" />
+<img src="public/loans.png" alt="Sales" />
 
 
 ##User Interface
@@ -62,6 +64,10 @@ Available Books Catalog:
   * New arrivals and featured books
 - Personalized recommendations based on borrowing history
 - Quick search with auto-complete
+
+### customer screen
+ <img src="public/customerAdmin.png" alt="Sales" />
+
 
 🛠️ Tech Stack
 
