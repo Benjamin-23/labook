@@ -100,7 +100,6 @@ cd labook
 Install dependencies:
 
 `npm install`
-# or
 `yarn install`
 
 Set up environment variables:
@@ -112,7 +111,6 @@ Create a .env.local file with the following variables:
 Run the development server:
 
 `npm run dev`
-# or
 `yarn dev`
 
 Open http://localhost:3000 in your browser to see the application.
@@ -120,19 +118,18 @@ Open http://localhost:3000 in your browser to see the application.
 🗄️ Database Schema
 The system uses the following core tables in Supabase:
 
-books: Stores book information (title, author, ISBN, etc.)
-inventory: Tracks quantity and status of each book
-users: Customer and staff information
-transactions: Records of sales and lending activities
-categories: Book classifications and genres
-loans: Records of book loans and returns
-purchase_item: Records of book purchases.
+-books: Stores book information (title, author, ISBN, etc.)
+-inventory: Tracks quantity and status of each book
+-users: Customer and staff information
+-transactions: Records of sales and lending activities
+-categories: Book classifications and genres
+-loans: Records of book loans and returns
+-purchase_item: Records of book purchases.
 
 
 🚀 Deployment
 This application can be deployed using Vercel for the frontend and continuing to use Supabase for the backend:
 `npm run build`
-# or
 `yarn build`
 
 📈 Future Enhancements
@@ -147,7 +144,7 @@ Email notification system
 MIT
 👥 Contributors
 
-Your Benjamin
+ Benjamin Kitonga
 
 🙏 Acknowledgements
 
