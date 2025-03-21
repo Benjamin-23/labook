@@ -19,30 +19,17 @@ Return Processing: Streamlined check-in procedures
 
 Sales Management
 
+
 Point of Sale (POS): Process book sales and payments
 Discount Management: Apply promotional offers and discounts
 Sales Reporting: Generate reports on sales performance and trends
 Customer Management: Track customer purchases and preferences
 
-Images & Assets
+<img src="public/sign-in.png" alt="Sales" />
+<img src="public/addUser.png" alt="Sales" />
+<img src="public/admindashboard.png" alt="Sales" />
+<img src="public/booklist.png" alt="Sales" />
 
-Default Book Cover: Import from public folder for books without cover images
-`import defaultCover from '@/public/images/addUser.png'`
-
-Sample Usage:
-```tsx
-<Image
-  src={book.coverUrl || defaultCover}
-  alt={book.title}
-  width={200}
-  height={300}
-  className="rounded-lg shadow-md"
-/>
-```
-
-System Icons: Material icons stored in public/icons
-Promotional Banners: Rotating banners in public/banners
-User Avatars: Default avatars in public/avatars
 
 ##User Interface
 
