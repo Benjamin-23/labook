@@ -80,20 +80,20 @@ Supabase account
 
 Clone the repository:
 
-git clone https://github.com/yourusername/library-inventory-system.git
-cd library-inventory-system
+git@github.com:Benjamin-23/labook.git
+cd labook
 
 Install dependencies:
 
-npm install
+`npm install`
 # or
 `yarn install`
 
 Set up environment variables:
 Create a .env.local file with the following variables:
 
-`CopyNEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key`
+`NEXT_PUBLIC_SUPABASE_URL=your_supabase_url`
+`NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key`
 
 Run the development server:
 
@@ -111,12 +111,16 @@ inventory: Tracks quantity and status of each book
 users: Customer and staff information
 transactions: Records of sales and lending activities
 categories: Book classifications and genres
+loans: Records of book loans and returns
+purchase_item: Records of book purchases.
+
 
 🚀 Deployment
 This application can be deployed using Vercel for the frontend and continuing to use Supabase for the backend:
-bashCopynpm run build
+`npm run build`
 # or
-yarn build
+`yarn build`
+
 📈 Future Enhancements
 
 Mobile app using React Native
@@ -129,7 +133,7 @@ Email notification system
 MIT
 👥 Contributors
 
-Your Name
+Your Benjamin
 
 🙏 Acknowledgements
 
