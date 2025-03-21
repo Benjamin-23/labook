@@ -1,5 +1,7 @@
 📚 Library and Book Store Inventory System
 
+video: https://www.loom.com/share/bcf9459eb0f04acc8b9fc7954f7c96e8?sid=f60df7b1-ea2c-471e-9fcb-98554067089a
+
 A comprehensive software solution for managing the tracking, cataloging, and circulation of books in libraries and bookstores. This system handles inventory control, lending/purchasing operations, and sales management efficiently.
 
 🚀 Features
