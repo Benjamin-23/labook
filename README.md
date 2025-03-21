@@ -29,8 +29,10 @@ Customer Management: Track customer purchases and preferences
 <img src="public/sign-in.png" alt="Sales" />
 <img src="public/admindashboard.png" alt="Sales" />
 <img src="public/addUser.png" alt="Sales" />
+<img src="public/addBook.png" alt="Sales" />
 <img src="public/booklist.png" alt="Sales" />
 <img src="public/loans.png" alt="Sales" />
+
 
 
 ##User Interface
